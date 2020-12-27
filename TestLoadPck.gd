@@ -1,11 +1,22 @@
 extends Node2D
 
 const _PCK = "test-0.2.0.pck"
+
+# one strategy
 const _VERSION_TXT = "user://version.txt"
+# another strategy
+const _VERSION_SETTING = "application/config/version"
+
 const _FIRST_VERSION = "0.1.0"
 const _LAST_VERSION = "0.2.0"
  
 func _version():
+	return _version_by_file()
+
+func _version_by_setting():
+	return ProjectSettings.get(_VERSION_SETTING)
+
+func _version_by_file():
 	var vf = File.new()
 	if vf.open(_VERSION_TXT, File.READ) != OK:
 		printerr("Failed to open version text ! ")
@@ -16,6 +27,14 @@ func _version():
 		return t
 		
 func _ready():
+	var pv = _version_by_setting()
+	if pv == null:
+		print("ProjectSettings version missing, setting it up for the first time")
+		ProjectSettings.set(_VERSION_SETTING, _FIRST_VERSION)
+		ProjectSettings.save()
+	else:
+		print("ProjectSettings %s: %s" % [ _VERSION_SETTING, _version_by_setting() ])
+	
 	var vf = File.new()
 	if !vf.file_exists(_VERSION_TXT):
 		_write_version_file(_FIRST_VERSION)
