@@ -16,9 +16,9 @@ const _LAST_VERSION = "0.2.0"
 var _cfg_version
 
 func _version():
-	return _version_by_setting()
+	return _version_by_config()
 
-func _version_by_setting():
+func _version_by_config():
 	return _cfg_version
 
 func _version_by_file():
@@ -32,12 +32,12 @@ func _version_by_file():
 		return t
 		
 func _ready():
-	# init a version ProjectSetting
+	# init with a config file
 	var vcf = ConfigFile.new()
 	vcf.load(_VERSION_CONFIG_FILE)
 	_cfg_version = vcf.get_value(_VERSION_SECTION, _VERSION_KEY)
 	if not _cfg_version:
-		print("%s version missing, setting it up for the first time" % _VERSION_CONFIG_FILE)
+		print("%s missing, setting it up for the first time" % _VERSION_CONFIG_FILE)
 		_cfg_version = _FIRST_VERSION
 		vcf.set_value(_VERSION_SECTION, _VERSION_KEY, _FIRST_VERSION)
 		vcf.save(_VERSION_CONFIG_FILE)
