@@ -58,7 +58,7 @@ func _on_WaitToLoad_timeout():
 			printerr("Failed to clean up %s" % _VERSION_TXT)
 
 func _write_version_setting(semver: String):
-	ProjectSettings.set(_VERSION_SETTING, _FIRST_VERSION)
+	ProjectSettings.set(_VERSION_SETTING, semver)
 	ProjectSettings.save()
 	
 
