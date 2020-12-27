@@ -16,7 +16,3 @@ _global_script_class_icons={
 [application]
 
 run/main_scene="res://TestLoadPck.tscn"
-
-[autoload]
-
-TestAutoload="*res://test_autoload.gd"
