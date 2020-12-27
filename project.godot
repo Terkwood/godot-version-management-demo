@@ -16,7 +16,15 @@ _global_script_class_icons={
 [application]
 
 run/main_scene="res://TestLoadPck.tscn"
+config/icon=""
+config/macos_native_icon=""
+config/version="0.1.0"
 
 [autoload]
 
 TestAutoload="*res://test_autoload.gd"
+
+[display]
+
+window/size/width=1024
+window/size/height=600
