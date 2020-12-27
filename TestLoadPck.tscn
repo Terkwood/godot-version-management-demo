@@ -1,0 +1,35 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://TestLoadPck.gd" type="Script" id=1]
+
+[node name="TestLoadPck" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="Prompt" type="TextEdit" parent="."]
+margin_left = 88.0413
+margin_top = 139.191
+margin_right = 516.041
+margin_bottom = 176.191
+rect_scale = Vector2( 2, 2 )
+text = "Do project settings update when a new resource pack is loaded ?"
+readonly = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="WhatVersion" type="TextEdit" parent="."]
+margin_left = 306.0
+margin_top = 283.0
+margin_right = 411.0
+margin_bottom = 318.0
+rect_scale = Vector2( 4, 4 )
+text = "This is v_._._"
+readonly = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="WaitToLoad" type="Timer" parent="."]
+wait_time = 3.0
+autostart = true
+[connection signal="timeout" from="WaitToLoad" to="." method="_on_WaitToLoad_timeout"]
