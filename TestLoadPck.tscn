@@ -14,7 +14,7 @@ rect_scale = Vector2( 2, 2 )
 text = "ProjectSettings do not update when a new resource pack is loaded.  We can work around this in a couple of ways:
 
 - by managing a ConfigFile saved in the `user://` directory
-- by saving our data to a plain file in the \"user://\" directory "
+- by saving our data to a plain file in the `user://` directory"
 readonly = true
 wrap_enabled = true
 __meta__ = {

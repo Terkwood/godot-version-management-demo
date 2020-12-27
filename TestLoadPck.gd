@@ -59,11 +59,16 @@ func _on_WaitToLoad_timeout():
 		_write_version_file(_LAST_VERSION)
 		get_tree().change_scene("res://TestLoadPck.tscn")
 	else:
-		$Prompt.text = "All done."
-		# clean up the version file so we can run this demo again
+		# clean up the plaintext version file so we can run this demo again
 		var vd = Directory.new()
 		if vd.remove(_VERSION_TXT) != OK:
-			printerr("Failed to clean up %s" % _VERSION_TXT)
+			printerr("Failed to clean up plain file %s" % _VERSION_TXT)
+			return
+		# clean up the user config file so we can run this demo again
+		if vd.remove(_VERSION_CONFIG_FILE) != OK:
+			printerr("Failed to clean up config file %s" % _VERSION_CONFIG_FILE)
+			return
+		$Prompt.text = "All done. We cleaned up the user:// directory so that you can run this program again."
 
 func _write_version_config(semver: String):
 	var vcf = ConfigFile.new()
