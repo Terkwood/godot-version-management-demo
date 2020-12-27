@@ -4,17 +4,22 @@ const _PCK = "test-0.2.0.pck"
 
 # one strategy
 const _VERSION_TXT = "user://version.txt"
+
 # another strategy
-const _VERSION_SETTING = "application/config/version"
+const _VERSION_SECTION = "application/config"
+const _VERSION_KEY = "version"
+const _VERSION_CONFIG_FILE = "user://version.cfg"
 
 const _FIRST_VERSION = "0.1.0"
 const _LAST_VERSION = "0.2.0"
- 
+
+var _cfg_version
+
 func _version():
 	return _version_by_setting()
 
 func _version_by_setting():
-	return ProjectSettings.get(_VERSION_SETTING)
+	return _cfg_version
 
 func _version_by_file():
 	var vf = File.new()
@@ -28,12 +33,15 @@ func _version_by_file():
 		
 func _ready():
 	# init a version ProjectSetting
-	var pv = _version_by_setting()
-	if pv == null:
-		print("ProjectSettings version missing, setting it up for the first time")
-		_write_version_setting(_FIRST_VERSION)
-	else:
-		print("ProjectSettings %s: %s" % [ _VERSION_SETTING, _version_by_setting() ])
+	var vcf = ConfigFile.new()
+	vcf.load(_VERSION_CONFIG_FILE)
+	_cfg_version = vcf.get_value(_VERSION_SECTION, _VERSION_KEY)
+	if not _cfg_version:
+		print("%s version missing, setting it up for the first time" % _VERSION_CONFIG_FILE)
+		_cfg_version = _FIRST_VERSION
+		vcf.set_value(_VERSION_SECTION, _VERSION_KEY, _FIRST_VERSION)
+		vcf.save(_VERSION_CONFIG_FILE)
+		
 	
 	# init a version file
 	var vf = File.new()
@@ -47,7 +55,7 @@ func _on_WaitToLoad_timeout():
 	if _version() == _FIRST_VERSION:
 		ProjectSettings.load_resource_pack(_PCK)
 		print("Still on the first version.  Changing scene")
-		_write_version_setting(_LAST_VERSION)
+		_write_version_config(_LAST_VERSION)
 		_write_version_file(_LAST_VERSION)
 		get_tree().change_scene("res://TestLoadPck.tscn")
 	else:
@@ -57,9 +65,10 @@ func _on_WaitToLoad_timeout():
 		if vd.remove(_VERSION_TXT) != OK:
 			printerr("Failed to clean up %s" % _VERSION_TXT)
 
-func _write_version_setting(semver: String):
-	ProjectSettings.set(_VERSION_SETTING, semver)
-	ProjectSettings.save()
+func _write_version_config(semver: String):
+	var vcf = ConfigFile.new()
+	vcf.set_value(_VERSION_SECTION, _VERSION_KEY, semver)
+	vcf.save(_VERSION_CONFIG_FILE)
 	
 
 func _write_version_file(semver: String):
